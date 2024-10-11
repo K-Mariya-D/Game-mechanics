@@ -1,41 +1,62 @@
+using System;
 using UnityEngine;
 
-/// <summary>
-/// Скрипт перемещения персонажа
-/// </summary>
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IMoving, ITransform
 {
-    private Transform _body;
-    private Animator _animator;
-    public float Speed = 5f;
-    public bool IsRunning = false;
+    /// <summary>
+    /// Скорость
+    /// </summary>
+    [SerializeField] private float _speed;
+    public float Speed { get => _speed; private set
+        {
+            if (value < 0f) throw new ArgumentOutOfRangeException("Player >> Speed < 0");
+            _speed = value;
+        }
+    }
+    /// <summary>
+    /// Находится ли объект в состоянии движения?
+    /// </summary>
+    [SerializeField] private bool _isMoving;
+    public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
+    /// <summary>
+    /// Каркас
+    /// </summary>
+    private Transform _trans;
+    public Transform Trans { get => _trans; private set => _trans = value; }
+    /// <summary>
+    /// Перемещение игрока посредством клавиатуры
+    /// </summary>
     void Start()
     {
-        _body = this.gameObject.GetComponent<Transform>();
-        _animator = this.gameObject.GetComponent<Animator>();
+        Trans = this.GetComponent<Transform>();
     }
     void Update()
     {
-        WASD();
-        UpdateRunning();
+        Move();
     }
-    /// <summary>
-    /// Передвижение игрока посредством клавиатуры 
-    /// </summary>
-    void WASD()
+    
+    void Move()
     {
-        if (Input.GetKey(KeyCode.A)) _body.position += Vector3.left * Speed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.D)) _body.position += Vector3.right * Speed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.W)) _body.position += Vector3.up * Speed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.S)) _body.position += Vector3.down * Speed * Time.deltaTime;
-    }
-    /// <summary>
-    /// Проверяет, находится ли игрок в состоянии передвижения
-    /// </summary>
-    void UpdateRunning()
-    {
-        if (!Input.anyKey) IsRunning = false;
-        else IsRunning = true;
-        _animator.SetBool("IsRunning", IsRunning);
+        IsMoving = false;
+        if (Input.GetKey(KeyCode.A))
+        {
+            Trans.position += Vector3.left * Speed * Time.deltaTime;
+            IsMoving = true;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            Trans.position += Vector3.right * Speed * Time.deltaTime;
+            IsMoving = true;
+        }
+        if (Input.GetKey(KeyCode.W))
+        {
+            Trans.position += Vector3.up * Speed * Time.deltaTime;
+            IsMoving = true;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            Trans.position += Vector3.down * Speed * Time.deltaTime;
+            IsMoving = true;
+        }
     }
 }

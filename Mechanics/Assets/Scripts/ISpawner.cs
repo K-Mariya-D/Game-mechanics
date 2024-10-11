@@ -1,22 +1,15 @@
-п»їusing System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public interface ISpawner
 {
     /// <summary>
-    /// РЎСѓС‰РЅРѕСЃС‚СЊ
+    /// Создаваемая сущность
     /// </summary>
-    GameObject Entity { get; }
+    public GameObject Entity { get; }
     /// <summary>
-    /// РћС‡РµСЂРµРґСЊ СЃСѓС‰РЅРѕСЃС‚РµР№
+    /// Частота появления сущностей
     /// </summary>
-    Queue<GameObject> _queueEntity { get; }
-    /// <summary>
-    /// РџРѕСЏРІР»РµРЅРёРµ СЃСѓС‰РµСЃС‚РІР°
-    /// </summary>
-    void Spawn();
-    /// <summary>
-    /// РЈРґР°Р»РµРЅРёРµ РїРµСЂРІРѕРіРѕ РїРѕСЏРІРёРІС€РµРіРѕСЃСЏ СЃСѓС‰РµСЃС‚РІР°
-    /// </summary>
-    void Remove();
+    public float Frequency { get; }
+    public float TimeToNextSpawn { get; }
 }
