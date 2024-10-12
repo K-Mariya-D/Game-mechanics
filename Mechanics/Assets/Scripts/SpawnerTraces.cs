@@ -14,7 +14,7 @@ public class SpawnerTraces : SpawnerWithQueue
     public override void Start()
     {
         base.Start();
-        _leavesTraces = GameObject.FindWithTag("Player").GetComponent<IMoving>();
+        LeavesTraces = GameObject.FindWithTag("Player").GetComponent<IMoving>();
     }
     public override void Update()
     {
