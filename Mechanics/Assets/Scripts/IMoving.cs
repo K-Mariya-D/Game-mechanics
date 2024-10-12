@@ -6,6 +6,10 @@ using UnityEngine;
 public interface IMoving
 {
     /// <summary>
+    /// Каркас
+    /// </summary>
+    public Transform Trans { get; }
+    /// <summary>
     /// Скорость
     /// </summary>
     public float Speed { get; }
@@ -13,4 +17,13 @@ public interface IMoving
     /// Находится ли объект в состоянии движения?
     /// </summary>
     public bool IsMoving { get; }
+    /// <summary>
+    /// Перемещение объекта
+    /// </summary>
+    void Move();
+    /// <summary>
+    /// Изменяет состояние объекта
+    /// </summary>
+    void ChangeIsMoving();
+
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IMoving, ITransform
+public class Player : MonoBehaviour, IMoving
 {
     /// <summary>
     /// Скорость
@@ -34,29 +34,35 @@ public class Player : MonoBehaviour, IMoving, ITransform
     {
         Move();
     }
-    
-    void Move()
+    /// <summary>
+    /// Перемещение игрока
+    /// </summary>
+    public void Move()
     {
         IsMoving = false;
         if (Input.GetKey(KeyCode.A))
         {
             Trans.position += Vector3.left * Speed * Time.deltaTime;
-            IsMoving = true;
+            ChangeIsMoving();
         }
         if (Input.GetKey(KeyCode.D))
         {
             Trans.position += Vector3.right * Speed * Time.deltaTime;
-            IsMoving = true;
+            ChangeIsMoving();
         }
         if (Input.GetKey(KeyCode.W))
         {
             Trans.position += Vector3.up * Speed * Time.deltaTime;
-            IsMoving = true;
+            ChangeIsMoving();
         }
         if (Input.GetKey(KeyCode.S))
         {
             Trans.position += Vector3.down * Speed * Time.deltaTime;
-            IsMoving = true;
+            ChangeIsMoving();
         }
     }
+    /// <summary>
+    /// Изменяет состояние игрока
+    /// </summary>
+    public void ChangeIsMoving() => IsMoving = !IsMoving;
 }
