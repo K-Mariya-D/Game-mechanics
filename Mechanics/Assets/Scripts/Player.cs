@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Игрок
+/// </summary>
 public class Player : MonoBehaviour, IMoving
 {
     /// <summary>

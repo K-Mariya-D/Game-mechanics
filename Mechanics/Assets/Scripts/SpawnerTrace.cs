@@ -5,18 +5,20 @@ using UnityEngine;
 public class SpawnerTrace : SpawnerWithQueue
 {
     /// <summary>
-    /// Персонаж, за которым идёт след
+    /// Тот, кто оставляет следы
     /// </summary>
-    [SerializeField] private Player _player;
-    public Player Player { get => _player; private set => _player = value; }
+    [SerializeField] private IMoving _leavesTraces;
+    public IMoving LeavesTraces {
+        get => _leavesTraces;
+        private set => _leavesTraces = value; }
     public override void Start()
     {
         base.Start();
-        if (Player == null) throw new ArgumentNullException("SpawnerTrace >> Player is null");
+        _leavesTraces = GameObject.FindWithTag("Player").GetComponent<IMoving>();
     }
     public override void Update()
     {
-        SpawnEntity(Player.Trans.position, Quaternion.identity);
+        SpawnEntity(_leavesTraces.Trans.position, Quaternion.identity);
         RemoveEntity();
     }
     /// <summary>
@@ -25,7 +27,7 @@ public class SpawnerTrace : SpawnerWithQueue
     public override void SpawnEntity(Vector3 position, Quaternion rotation)
     {
         TimeToNextSpawn -= Time.deltaTime;
-        if (_player.IsMoving && TimeToNextSpawn <= 0f)
+        if (_leavesTraces.IsMoving && TimeToNextSpawn <= 0f)
         {
             QueueEntity.Enqueue(Instantiate(Entity, position, rotation));
             TimeToNextSpawn = Frequency;
@@ -36,7 +38,7 @@ public class SpawnerTrace : SpawnerWithQueue
     /// </summary>
     public override void RemoveEntity()
     {
-        if (QueueEntity.Count > SpawnCount)
+        if (QueueEntity.Count > MaxSpawnCount)
             DestroyImmediate(QueueEntity.Dequeue());
     }
 }
