@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using System;
 using UnityEngine;
 
-public class SpawnerTrace : SpawnerWithQueue
+public class SpawnerTraces : SpawnerWithQueue
 {
     /// <summary>
     /// Тот, кто оставляет следы
@@ -18,7 +16,7 @@ public class SpawnerTrace : SpawnerWithQueue
     }
     public override void Update()
     {
-        SpawnEntity(_leavesTraces.Trans.position, Quaternion.identity);
+        SpawnEntity(LeavesTraces.Trans.position, Quaternion.identity);
         RemoveEntity();
     }
     /// <summary>
@@ -27,7 +25,7 @@ public class SpawnerTrace : SpawnerWithQueue
     public override void SpawnEntity(Vector3 position, Quaternion rotation)
     {
         TimeToNextSpawn -= Time.deltaTime;
-        if (_leavesTraces.IsMoving && TimeToNextSpawn <= 0f)
+        if (LeavesTraces.IsMoving && TimeToNextSpawn <= 0f)
         {
             QueueEntity.Enqueue(Instantiate(Entity, position, rotation));
             TimeToNextSpawn = Frequency;
