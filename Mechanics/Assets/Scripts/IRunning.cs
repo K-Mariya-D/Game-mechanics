@@ -19,4 +19,8 @@ public interface IRunning
     /// Ускорение
     /// </summary>
     void SpeedBoost();
+    /// <summary>
+    /// Изменяет состояние объекта
+    /// </summary>
+    void ChangeIsRunning();
 }
