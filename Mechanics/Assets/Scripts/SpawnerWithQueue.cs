@@ -41,6 +41,7 @@ public abstract class SpawnerWithQueue : MonoBehaviour, ISpawner
     /// Максимальное число сущностей, находящихся на одной сцене одновременно
     /// </summary>
     [SerializeField] private int _spawnCount = 0;
+    public int MaxSpawnCount { get => _spawnCount; }
     public int SpawnCount {
         get => _spawnCount;
         protected set
