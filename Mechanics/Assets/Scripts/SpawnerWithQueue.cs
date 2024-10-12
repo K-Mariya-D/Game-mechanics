@@ -59,9 +59,9 @@ public abstract class SpawnerWithQueue : MonoBehaviour, ISpawner
     /// <summary>
     /// Спавнит сущность и добавляет её в очередь
     /// </summary>
-    public abstract void Spawn(Vector3 position, Quaternion rotation);
+    public abstract void SpawnEntity(Vector3 position, Quaternion rotation);
     /// <summary>
     /// Выкидывает сущность из очереди
     /// </summary>
-    public abstract void Kill();
+    public abstract void RemoveEntity();
 }

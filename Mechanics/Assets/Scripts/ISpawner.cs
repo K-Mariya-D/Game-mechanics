@@ -23,4 +23,12 @@ public interface ISpawner
     /// Максимальное число созданных существ одним спавнером
     /// </summary>
     public int MaxSpawnCount { get; }
+    /// <summary>
+    /// Создаёт сущность
+    /// </summary>
+    void SpawnEntity(Vector3 position, Quaternion rotation);
+    /// <summary>
+    /// Удаляет созданную сущность
+    /// </summary>
+    void RemoveEntity();
 }

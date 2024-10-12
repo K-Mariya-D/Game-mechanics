@@ -16,13 +16,13 @@ public class SpawnerTrace : SpawnerWithQueue
     }
     public override void Update()
     {
-        Spawn(Player.Trans.position, Quaternion.identity);
-        Kill();
+        SpawnEntity(Player.Trans.position, Quaternion.identity);
+        RemoveEntity();
     }
     /// <summary>
     /// Спавнит сущность и добавляет её в очередь
     /// </summary>
-    public override void Spawn(Vector3 position, Quaternion rotation)
+    public override void SpawnEntity(Vector3 position, Quaternion rotation)
     {
         TimeToNextSpawn -= Time.deltaTime;
         if (_player.IsMoving && TimeToNextSpawn <= 0f)
@@ -34,7 +34,7 @@ public class SpawnerTrace : SpawnerWithQueue
     /// <summary>
     /// Выкидывает сущность из очереди
     /// </summary>
-    public override void Kill()
+    public override void RemoveEntity()
     {
         if (QueueEntity.Count > SpawnCount)
             DestroyImmediate(QueueEntity.Dequeue());
