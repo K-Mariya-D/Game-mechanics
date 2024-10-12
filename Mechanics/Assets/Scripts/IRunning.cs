@@ -8,6 +8,10 @@ using UnityEngine;
 public interface IRunning
 {
     /// <summary>
+    /// Буст к скорости
+    /// </summary>
+    float Boost { get; }
+    /// <summary>
     /// Бежит ли объект
     /// </summary>
     bool IsRunning { get; }
