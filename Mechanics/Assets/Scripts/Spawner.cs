@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SpawnerWithQueue : MonoBehaviour, ISpawner
+public abstract class Spawner : MonoBehaviour, ISpawner
 {
     /// <summary>
     /// Создаваемая сущность
@@ -39,7 +39,11 @@ public abstract class SpawnerWithQueue : MonoBehaviour, ISpawner
     /// Очередь созданных сущностей
     /// </summary>
     private Queue<GameObject> _queueEntity;
-    public Queue<GameObject> QueueEntity { get => _queueEntity; protected set => _queueEntity = value; }
+    public Queue<GameObject> QueueEntity
+    {
+        get => _queueEntity;
+        protected set => _queueEntity = value;
+    }
     /// <summary>
     /// Максимальное число сущностей, находящихся на одной сцене одновременно
     /// </summary>

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpawnerTraces : SpawnerWithQueue
+public class SpawnerTraces : Spawner
 {
     /// <summary>
     /// Тот, кто оставляет следы
@@ -14,7 +14,7 @@ public class SpawnerTraces : SpawnerWithQueue
     public override void Start()
     {
         base.Start();
-        LeavesTraces = GameObject.FindWithTag("Player").GetComponent<IMoving>();
+        LeavesTraces = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
     public override void Update()
     {

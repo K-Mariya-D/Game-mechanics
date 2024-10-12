@@ -48,22 +48,22 @@ public class Player : MonoBehaviour, IMoving
         if (Input.GetKey(KeyCode.A))
         {
             Trans.position += Vector3.left * Speed * Time.deltaTime;
-            ChangeIsMoving();
+            IsMoving = true;
         }
         if (Input.GetKey(KeyCode.D))
         {
             Trans.position += Vector3.right * Speed * Time.deltaTime;
-            ChangeIsMoving();
+            IsMoving = true;
         }
         if (Input.GetKey(KeyCode.W))
         {
             Trans.position += Vector3.up * Speed * Time.deltaTime;
-            ChangeIsMoving();
+            IsMoving = true;
         }
         if (Input.GetKey(KeyCode.S))
         {
             Trans.position += Vector3.down * Speed * Time.deltaTime;
-            ChangeIsMoving();
+            IsMoving = true;
         }
     }
     /// <summary>

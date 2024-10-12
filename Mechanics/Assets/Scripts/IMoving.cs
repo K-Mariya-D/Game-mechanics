@@ -25,5 +25,4 @@ public interface IMoving
     /// Изменяет состояние объекта
     /// </summary>
     void ChangeIsMoving();
-
 }
