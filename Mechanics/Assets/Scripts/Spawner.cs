@@ -11,7 +11,11 @@ public abstract class Spawner : MonoBehaviour, ISpawner
     public GameObject Entity
     {
         get => _entity;
-        protected set => _entity = value;
+        protected set
+        {
+            if (value == null) throw new ArgumentOutOfRangeException("Spawner: Entity is null");
+            _entity = value;
+        }
     }
     /// <summary>
     /// Частота появления сущностей
@@ -22,12 +26,12 @@ public abstract class Spawner : MonoBehaviour, ISpawner
         get => _frequency;
         protected set
         {
-            if (value < 0f) throw new ArgumentOutOfRangeException("SpawnerWithQueue >> Frequency < 0");
+            if (value < 0f) throw new ArgumentOutOfRangeException("SpawnerWithQueue: Frequency < 0");
             _frequency = value;
         }
     }
     /// <summary>
-    /// Оставшееся время до следующего появления сущности
+    /// Время до следующего появления сущности
     /// </summary>
     private float _timeToNextSpawn = 0f;
     public float TimeToNextSpawn
@@ -42,7 +46,11 @@ public abstract class Spawner : MonoBehaviour, ISpawner
     public Queue<GameObject> QueueEntity
     {
         get => _queueEntity;
-        protected set => _queueEntity = value;
+        protected set
+        {
+            if (value == null) throw new ArgumentOutOfRangeException("QueueEntity is null");
+            _queueEntity = value;
+        }
     }
     /// <summary>
     /// Максимальное число сущностей, находящихся на одной сцене одновременно
@@ -59,7 +67,6 @@ public abstract class Spawner : MonoBehaviour, ISpawner
     }
     public virtual void Start()
     {
-        if (Entity == null) throw new ArgumentNullException("SpawnerWithQueue >> Entity is null");
         QueueEntity = new Queue<GameObject>();
     }
     public abstract void Update();

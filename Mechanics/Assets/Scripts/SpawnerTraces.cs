@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SpawnerTraces : Spawner
@@ -9,12 +10,16 @@ public class SpawnerTraces : Spawner
     public IMoving LeavesTraces
     {
         get => _leavesTraces;
-        private set => _leavesTraces = value;
+        private set
+        {
+            if (value == null) throw new ArgumentOutOfRangeException("LeavesTraces is null");
+            _leavesTraces = value;
+        }
     }
     public override void Start()
     {
         base.Start();
-        LeavesTraces = GameObject.FindWithTag("Player").GetComponent<Player>();
+        LeavesTraces = GameObject.FindWithTag("Player").GetComponent<Player>(); //Поиск игрока
     }
     public override void Update()
     {

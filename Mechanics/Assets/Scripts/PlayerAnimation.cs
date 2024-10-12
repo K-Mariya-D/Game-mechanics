@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour, IAnimated
@@ -9,7 +10,11 @@ public class PlayerAnimation : MonoBehaviour, IAnimated
     public IMoving ObjectAnimated
     {
         get => _objectAnimated;
-        private set => _objectAnimated = value;
+        private set
+        {
+            if (value == null) throw new ArgumentOutOfRangeException("ObjectAnimated is null");
+            _objectAnimated = value;
+        }
     }
     /// <summary>
     /// Аниматор
@@ -18,7 +23,11 @@ public class PlayerAnimation : MonoBehaviour, IAnimated
     public Animator Animator
     {
         get => _animator;
-        private set => _animator = value;
+        private set
+        {
+            if (value == null) throw new ArgumentOutOfRangeException("Animator is null");
+            _animator = value;
+        }
     }
     void Start()
     {
@@ -30,7 +39,7 @@ public class PlayerAnimation : MonoBehaviour, IAnimated
         Animate();
     }
     /// <summary>
-    /// Следит состоянием анимаций
+    /// Следит за состоянием анимаций
     /// </summary>
     void Animate()
     {

@@ -14,7 +14,7 @@ public class Player : MonoBehaviour, IMoving
     {
         get => _speed; private set
         {
-            if (value < 0f) throw new ArgumentOutOfRangeException("Player >> Speed < 0");
+            if (value < 0f) throw new ArgumentOutOfRangeException("Player: Speed < 0");
             _speed = value;
         }
     }
