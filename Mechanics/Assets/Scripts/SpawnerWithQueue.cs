@@ -8,7 +8,8 @@ public abstract class SpawnerWithQueue : MonoBehaviour, ISpawner
     /// Создаваемая сущность
     /// </summary>
     [SerializeField] private GameObject _entity;
-    public GameObject Entity {
+    public GameObject Entity
+    {
         get => _entity;
         protected set => _entity = value;
     }
@@ -16,7 +17,8 @@ public abstract class SpawnerWithQueue : MonoBehaviour, ISpawner
     /// Частота появления сущностей
     /// </summary>
     [SerializeField] private float _frequency = 0f;
-    public float Frequency {
+    public float Frequency
+    {
         get => _frequency;
         protected set
         {
@@ -28,7 +30,8 @@ public abstract class SpawnerWithQueue : MonoBehaviour, ISpawner
     /// Оставшееся время до следующего появления сущности
     /// </summary>
     private float _timeToNextSpawn = 0f;
-    public float TimeToNextSpawn {
+    public float TimeToNextSpawn
+    {
         get => _timeToNextSpawn;
         protected set => _timeToNextSpawn = value;
     }
@@ -41,7 +44,8 @@ public abstract class SpawnerWithQueue : MonoBehaviour, ISpawner
     /// Максимальное число сущностей, находящихся на одной сцене одновременно
     /// </summary>
     [SerializeField] private int _maxSpawnCount = 0;
-    public int MaxSpawnCount {
+    public int MaxSpawnCount
+    {
         get => _maxSpawnCount;
         private set
         {

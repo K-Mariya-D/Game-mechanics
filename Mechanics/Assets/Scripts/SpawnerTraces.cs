@@ -6,9 +6,11 @@ public class SpawnerTraces : SpawnerWithQueue
     /// Тот, кто оставляет следы
     /// </summary>
     [SerializeField] private IMoving _leavesTraces;
-    public IMoving LeavesTraces {
+    public IMoving LeavesTraces
+    {
         get => _leavesTraces;
-        private set => _leavesTraces = value; }
+        private set => _leavesTraces = value;
+    }
     public override void Start()
     {
         base.Start();

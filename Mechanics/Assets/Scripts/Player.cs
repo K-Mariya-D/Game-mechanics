@@ -10,7 +10,9 @@ public class Player : MonoBehaviour, IMoving
     /// Скорость
     /// </summary>
     [SerializeField] private float _speed;
-    public float Speed { get => _speed; private set
+    public float Speed
+    {
+        get => _speed; private set
         {
             if (value < 0f) throw new ArgumentOutOfRangeException("Player >> Speed < 0");
             _speed = value;
