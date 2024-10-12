@@ -9,7 +9,7 @@ public class Player : MonoBehaviour, IMoving, IRunning
     /// <summary>
     /// Скорость
     /// </summary>
-    [SerializeField] private float _walkSpeed;
+    [SerializeField] private float _walkSpeed = 4f;
     public float WalkSpeed
     {
         get => _walkSpeed; private set
@@ -40,7 +40,7 @@ public class Player : MonoBehaviour, IMoving, IRunning
     /// <summary>
     /// Буст к скорости
     /// </summary>
-    [SerializeField] private float _runSpeed;
+    [SerializeField] private float _runSpeed = 6f;
     public float RunSpeed
     {
         get => _runSpeed;

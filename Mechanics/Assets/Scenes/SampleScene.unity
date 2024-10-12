@@ -167,9 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _entity: {fileID: 6623365819809704427, guid: 43b0e5a1776f00046af556fc37bec245, type: 3}
-  _frequency: 2
-  _spawnCount: 3
-  _player: {fileID: 1283335887}
+  _frequency: 0.5
+  _maxSpawnCount: 10
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,7 +273,7 @@ GameObject:
   - component: {fileID: 1283335887}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -291,8 +290,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64dca51113231894098274e0c1722e8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
-  _isMoving: 0
+  _walkSpeed: 4
+  _runSpeed: 6
 --- !u!4 &1283335888
 Transform:
   m_ObjectHideFlags: 0
@@ -320,6 +319,7 @@ GameObject:
   - component: {fileID: 1297295988}
   - component: {fileID: 1297295990}
   - component: {fileID: 1297295989}
+  - component: {fileID: 1297295991}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -415,6 +415,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1297295991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297295987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a9d1d9be0c907b4b9cf7657fad3e9c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
