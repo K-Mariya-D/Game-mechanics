@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public interface ISpawner
 {
     /// <summary>
@@ -12,7 +13,7 @@ public interface ISpawner
     /// </summary>
     public float Frequency { get; }
     /// <summary>
-    /// Время до следующего появления
+    /// Время до следующего появления существа
     /// </summary>
     public float TimeToNextSpawn { get; }
     /// <summary>
@@ -20,15 +21,15 @@ public interface ISpawner
     /// </summary>
     public Queue<GameObject> QueueEntity { get; }
     /// <summary>
-    /// Максимальное число созданных существ одним спавнером
+    /// Максимальное число созданных на одной сцене существ данным спавнером
     /// </summary>
     public int MaxSpawnCount { get; }
     /// <summary>
-    /// Создаёт сущность
+    /// Создаёт сущность на сцене
     /// </summary>
     void SpawnEntity(Vector3 position, Quaternion rotation);
     /// <summary>
-    /// Удаляет созданную сущность
+    /// Удаляет созданную на сцене сущность
     /// </summary>
     void RemoveEntity();
 }

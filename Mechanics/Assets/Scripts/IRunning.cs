@@ -8,11 +8,15 @@ using UnityEngine;
 public interface IRunning
 {
     /// <summary>
-    /// Буст к скорости
+    /// Каркас
+    /// </summary>
+    public Transform Trans { get; }
+    /// <summary>
+    /// Скорость бега
     /// </summary>
     float RunSpeed { get; }
     /// <summary>
-    /// Бежит ли объект
+    /// Состояние передвижения бегом
     /// </summary>
     bool IsRunning { get; }
 }
