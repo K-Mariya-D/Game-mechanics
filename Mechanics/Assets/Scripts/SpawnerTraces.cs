@@ -27,7 +27,7 @@ public class SpawnerTraces : Spawner
         RemoveEntity();
     }
     /// <summary>
-    /// Спавнит сущность и добавляет её в очередь
+    /// Спавнит сущность на сцене и добавляет её в очередь
     /// </summary>
     public override void SpawnEntity(Vector3 position, Quaternion rotation)
     {
@@ -39,7 +39,7 @@ public class SpawnerTraces : Spawner
         }
     }
     /// <summary>
-    /// Выкидывает сущность из очереди
+    /// Удаляет первую созданную на сцене сущность
     /// </summary>
     public override void RemoveEntity()
     {

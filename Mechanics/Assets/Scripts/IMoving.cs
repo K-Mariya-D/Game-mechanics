@@ -10,11 +10,11 @@ public interface IMoving
     /// </summary>
     public Transform Trans { get; }
     /// <summary>
-    /// Скорость
+    /// Скорость пешком
     /// </summary>
     public float WalkSpeed { get; }
     /// <summary>
-    /// Находится ли объект в состоянии движения?
+    /// Состояние передвижения пешком
     /// </summary>
     public bool IsMoving { get; }
 }

@@ -7,7 +7,16 @@ using UnityEngine;
 public class Player : MonoBehaviour, IMoving, IRunning
 {
     /// <summary>
-    /// Скорость
+    /// Каркас
+    /// </summary>
+    private Transform _trans;
+    public Transform Trans
+    {
+        get => _trans;
+        private set => _trans = value;
+    }
+    /// <summary>
+    /// Скорость пешком
     /// </summary>
     [SerializeField] private float _walkSpeed = 4f;
     public float WalkSpeed
@@ -19,26 +28,7 @@ public class Player : MonoBehaviour, IMoving, IRunning
         }
     }
     /// <summary>
-    /// Находится ли объект в состоянии движения?
-    /// </summary>
-    private bool _isMoving;
-    public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
-    /// <summary>
-    /// Каркас
-    /// </summary>
-    private Transform _trans;
-    public Transform Trans { get => _trans; private set => _trans = value; }
-    /// <summary>
-    /// Бежит ли объект
-    /// </summary>
-    private bool _isRunning;
-    public bool IsRunning
-    {
-        get => _isRunning;
-        private set => _isRunning = value;
-    }
-    /// <summary>
-    /// Буст к скорости
+    /// Скорость бега
     /// </summary>
     [SerializeField] private float _runSpeed = 6f;
     public float RunSpeed
@@ -51,8 +41,19 @@ public class Player : MonoBehaviour, IMoving, IRunning
         }
     }
     /// <summary>
-    /// Перемещение игрока посредством клавиатуры
+    /// Состояние передвижения пешком
     /// </summary>
+    private bool _isMoving;
+    public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
+    /// <summary>
+    /// Состояние передвижения бегом
+    /// </summary>
+    private bool _isRunning;
+    public bool IsRunning
+    {
+        get => _isRunning;
+        private set => _isRunning = value;
+    }
     void Start()
     {
         Trans = this.GetComponent<Transform>();
@@ -90,7 +91,7 @@ public class Player : MonoBehaviour, IMoving, IRunning
         }
     }
     /// <summary>
-    /// Проверяет, ускорен объект или нет.
+    /// Проверяет, нажат ли LeftShift для бега
     /// </summary>
     void CheckBoost()
     {
@@ -98,7 +99,7 @@ public class Player : MonoBehaviour, IMoving, IRunning
         else IsRunning = false;
     }
     /// <summary>
-    /// Возвращает конечную скорость игрока
+    /// Возвращает результативную скорость в зависимости от состояния движения
     /// </summary>
     float Speed()
     {
