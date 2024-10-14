@@ -33,7 +33,7 @@ public class CameraEffects : MonoBehaviour
         }
         camera.position = startPose;
     }
-
+    /*
     /// <summary>
     /// Затемнение и осветление экрана c указанной скоростью
     /// </summary>
@@ -51,7 +51,7 @@ public class CameraEffects : MonoBehaviour
 
         while (color.a > 0f)
         {
-            color.a -= 1f * Time.deltaTime;
+            color.a -= speed * Time.deltaTime;
             fader.color = color;
             yield return null;
         }
@@ -62,9 +62,9 @@ public class CameraEffects : MonoBehaviour
 
         while (color.a < 1f)
         {
-            color.a += 1f * Time.deltaTime;
+            color.a += speed * Time.deltaTime;
             fader.color = color;
             yield return null;
         }
-    }
+    }*/
 }
