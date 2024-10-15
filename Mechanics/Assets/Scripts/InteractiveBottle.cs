@@ -17,6 +17,18 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
         }
     }
     /// <summary>
+    /// Находится ли объект в состоянии взаимодействия
+    /// </summary>
+    private bool _isInteractable = false;
+    public bool IsInteractable
+    {
+        get => _isInteractable;
+        private set
+        {
+            _isInteractable = value;
+        }
+    }
+    /// <summary>
     /// Дистанция, с которой можно взаимодействовать с объектом
     /// </summary>
     [SerializeField] private float _distance;

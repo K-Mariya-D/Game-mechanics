@@ -12,6 +12,10 @@ public interface IInteractable
     /// </summary>
     public float Distance { get; }
     /// <summary>
+    /// Находится ли объект в состоянии взаимодействия
+    /// </summary>
+    public bool IsInteractable { get; }
+    /// <summary>
     /// Взаимодействие с объектом
     /// </summary>
     public void Interactive();

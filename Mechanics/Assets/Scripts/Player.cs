@@ -43,12 +43,12 @@ public class Player : MonoBehaviour, IMoving, IRunning
     /// <summary>
     /// Состояние передвижения пешком
     /// </summary>
-    private bool _isMoving;
+    private bool _isMoving = false;
     public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
     /// <summary>
     /// Состояние передвижения бегом
     /// </summary>
-    private bool _isRunning;
+    private bool _isRunning = false;
     public bool IsRunning
     {
         get => _isRunning;
