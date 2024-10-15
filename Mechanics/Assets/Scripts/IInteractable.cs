@@ -1,8 +1,14 @@
+using TMPro;
+
 /// <summary>
 /// Интерфейс, поддерживающий интерактивные объекты
 /// </summary>
 public interface IInteractable
 {
+    /// <summary>
+    /// UI элемент Text, привязанный к интерактивному объекты
+    /// </summary>
+    public TextMeshProUGUI UIText { get; }
     /// <summary>
     /// Описание интерактивного объекта
     /// </summary>
@@ -15,6 +21,14 @@ public interface IInteractable
     /// Находится ли объект в состоянии взаимодействия
     /// </summary>
     public bool IsInteractable { get; }
+    /// <summary>
+    /// Корректно устанавливает текст на экране
+    /// </summary>
+    public void PlaceUIText();
+    /// <summary>
+    /// Отображает UIText в соответствие с состоянием объекта
+    /// </summary>
+    public void ShowUIText();
     /// <summary>
     /// Взаимодействие с объектом
     /// </summary>
