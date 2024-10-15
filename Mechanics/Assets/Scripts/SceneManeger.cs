@@ -44,6 +44,6 @@ public class SceneManeger : MonoBehaviour
 
         Debug.Log("Конец Затемнения. Переключение сцены");
 
-        SceneManager.LoadScene("SampleScene"); 
+        SceneManager.LoadScene("ExampleSceneTwo"); 
     }
 }
