@@ -44,7 +44,7 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
     /// <summary>
     /// Взаимодействие с объектом
     /// </summary>
-    public void Interactive()
+    public void Interact()
     {
         if (Input.GetKey(KeyCode.E)) this.gameObject.SetActive(false);
     }

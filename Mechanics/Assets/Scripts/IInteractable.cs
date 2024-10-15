@@ -18,5 +18,5 @@ public interface IInteractable
     /// <summary>
     /// Взаимодействие с объектом
     /// </summary>
-    public void Interactive();
+    public void Interact();
 }
