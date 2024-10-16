@@ -1,11 +1,10 @@
 using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 public class InteractiveBottle : MonoBehaviour, IInteractable
 {
     /// <summary>
-    /// Описание интерактивного объекта
+    /// UIText на канвасе CallObject
     /// </summary>
     [SerializeField] private TextMeshProUGUI _uIText;
     public TextMeshProUGUI UIText
@@ -18,7 +17,7 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
         }
     }
     /// <summary>
-    /// Описание интерактивного объекта
+    /// Описание
     /// </summary>
     [SerializeField] private string _description;
     public string Description
@@ -56,7 +55,9 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
             _distance = value;
         }
     }
-
+    /// <summary>
+    /// Тело, взаимодействующее с интерактивным объектом
+    /// </summary>
     [SerializeField] private GameObject _callObject;
     public GameObject CallObject
     {
@@ -67,15 +68,17 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
             _callObject = value;
         }
     }
-
     private void Start()
     {
+        //Настройка UIText
         Canvas canvas = GameObject.FindObjectOfType<Canvas>();
         UIText = new GameObject("TextMeshProUGUI").AddComponent<TextMeshProUGUI>();
         UIText.text = Description;
+        UIText.alignment = TextAlignmentOptions.Center;
         UIText.transform.SetParent(canvas.transform, false);
-    }
+        //Настройка Collider
 
+    }
     public void Update()
     {
         PlaceUIText();
@@ -83,14 +86,11 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
         Interact();
     }
     /// <summary>
-    /// Корректно устанавливает текст на экране
+    /// Устанавливает UIText на экране
     /// </summary>
-    public void PlaceUIText()
-    {
-        UIText.rectTransform.position = GameObject.FindObjectOfType<Camera>().WorldToScreenPoint(this.transform.position + Vector3.up);
-    }
+    public void PlaceUIText() => UIText.rectTransform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, this.transform.position + Vector3.up * 1.2f);
     /// <summary>
-    /// Отображает UIText в соответствие с состоянием объекта
+    /// Отображает UIText в соответствие с состоянием IsInteractable
     /// </summary>
     public void ShowUIText()
     {
@@ -99,10 +99,15 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
         UIText.gameObject.SetActive(IsInteractable);
     }
     /// <summary>
-    /// Взаимодействие с объектом
+    /// Взаимодействие с интерактивным объектом
     /// </summary>
     public void Interact()
     {
-        if (IsInteractable && Input.GetKey(KeyCode.E)) this.gameObject.SetActive(false);
+        if (IsInteractable && Input.GetKey(KeyCode.E))
+        {
+            //Пока что происходит уничтожение объекта
+            Destroy(UIText.gameObject);
+            Destroy(this.gameObject);
+        }
     }
 }

@@ -1,4 +1,6 @@
 using TMPro;
+using Unity;
+using UnityEngine;
 
 /// <summary>
 /// Интерфейс, поддерживающий интерактивные объекты
