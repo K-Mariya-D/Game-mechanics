@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using TMPro.EditorUtilities;
 using Unity.VisualScripting;
 using UnityEngine;
 public class InteractiveBottle : MonoBehaviour, IInteractable
@@ -41,6 +42,19 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
         {
             if (value == null) throw new ArgumentNullException("InteractiveBottle: UIText is null");
             _uIText = value;
+        }
+    }
+    /// <summary>
+    /// ״נטפע UIText
+    /// </summary>
+    private Font _font;
+    public Font Font
+    {
+        get => _font;
+        private set
+        {
+            if (value == null) throw new ArgumentNullException("InteractiveBottle: Font is null");
+            _font = value;
         }
     }
     /// <summary>

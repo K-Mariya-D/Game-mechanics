@@ -23,6 +23,10 @@ public interface IInteractable
     /// </summary>
     public TextMeshProUGUI UIText { get; }
     /// <summary>
+    /// Шрифт к UIText
+    /// </summary>
+    public Font Font { get; }
+    /// <summary>
     /// Описание интерактивного объекта
     /// </summary>
     public string Description { get; }
