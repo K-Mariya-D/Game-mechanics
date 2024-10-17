@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -21,6 +22,8 @@ public class CameraMove : MonoBehaviour
 
     private void Start()
     {
+        if (speed < 0) throw new ArgumentException("speed should be >= 0!");
+
         _trans = GetComponent<Transform>();
     }
     // Update is called once per frame

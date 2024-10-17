@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,10 @@ public class ShakeEffect : MonoBehaviour
     /// <param name="amplitude"></param>
     public void ShakeCamera(float time, float amplitude, Action shakeCallback)
     {
+        if (time <= 0) throw new ArgumentException("time should be > 0 !");
+        if (amplitude <= 0) throw new ArgumentException("amplitude should be > 0!");
+        if (shakeCallback == null) throw new ArgumentNullException("shakeCallback");
+
         StartCoroutine(_ShakeCamera(time, amplitude, shakeCallback));
     }
     private IEnumerator _ShakeCamera(float time, float amplitude, Action shakeCallback)

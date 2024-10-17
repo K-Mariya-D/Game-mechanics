@@ -31,6 +31,8 @@ public class Fader : MonoBehaviour
     /// <param name="fadeInCallback"></param>
     public void FadeIn(Action fadeInCallback)
     {
+        if (fadeInCallback == null) throw new ArgumentNullException("fadeInCallback");
+
         _fadeInCallback = fadeInCallback;
         _animator.SetBool(name: "isFaded", false);
     }
@@ -40,6 +42,8 @@ public class Fader : MonoBehaviour
     /// <param name="fadeOutCallback"></param>
     public void FadeOut(Action fadeOutCallback)
     {
+        if (fadeOutCallback == null) throw new ArgumentNullException("fadeOutCallback");
+
         _fadeOutCallback = fadeOutCallback;
         _animator.SetBool(name: "isFaded", true);
     }
