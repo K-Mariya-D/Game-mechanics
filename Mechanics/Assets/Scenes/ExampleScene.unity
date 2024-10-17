@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0caba3217774af4aa9948a207aacbc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 1332365584}
+  _camera: {fileID: 1332365584}
 --- !u!1 &1332365584
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,7 +325,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252cc06e3b307a74db03a9559c38951a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fader: {fileID: 0}
 --- !u!1 &1451635452
 GameObject:
   m_ObjectHideFlags: 0

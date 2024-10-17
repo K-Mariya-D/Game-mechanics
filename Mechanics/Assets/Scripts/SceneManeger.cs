@@ -44,7 +44,6 @@ public class SceneManeger : MonoBehaviour
         while (_wait)
             yield return null;
 
-
         _wait = true;
         Debug.Log("Начало Затемнения");
         
