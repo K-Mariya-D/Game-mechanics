@@ -1,5 +1,4 @@
 using TMPro;
-using Unity;
 using UnityEngine;
 
 /// <summary>
@@ -8,7 +7,19 @@ using UnityEngine;
 public interface IInteractable
 {
     /// <summary>
-    /// UI элемент Text, привязанный к интерактивному объекты
+    /// Круглый коллайдер
+    /// </summary>
+    public CircleCollider2D Collider { get; }
+    /// <summary>
+    /// Тело, которое взаимодействует с интерактивным объектом
+    /// </summary>
+    public GameObject CallObject { get; }
+    /// <summary>
+    /// Дистанция, с которой можно взаимодействовать с объектом
+    /// </summary>
+    public float Distance { get; }
+    /// <summary>
+    /// UIText на канвасе
     /// </summary>
     public TextMeshProUGUI UIText { get; }
     /// <summary>
@@ -16,23 +27,34 @@ public interface IInteractable
     /// </summary>
     public string Description { get; }
     /// <summary>
-    /// Дистанция, с которой можно взаимодействовать с объектом
+    /// Метод, вызывающийся при входе CallObject в Collider
     /// </summary>
-    public float Distance { get; }
+    /// <param name="collision"></param>
+    public void OnTriggerEnter2D(Collider2D collision);
     /// <summary>
-    /// Находится ли объект в состоянии взаимодействия
+    /// Метод, вызывающийся, когда CallObject стоит в Collider 
     /// </summary>
-    public bool IsInteractable { get; }
+    /// <param name="collision"></param>
+    public void OnTriggerStay2D(Collider2D collision);
+    /// <summary>
+    /// Метод, вызывающийся при выходе CallObject из Collider
+    /// </summary>
+    /// <param name="collision"></param>
+    public void OnTriggerExit2D(Collider2D collision);
     /// <summary>
     /// Корректно устанавливает текст на экране
     /// </summary>
     public void PlaceUIText();
     /// <summary>
-    /// Отображает UIText в соответствие с состоянием объекта
+    /// Отображает UIText
     /// </summary>
     public void ShowUIText();
     /// <summary>
-    /// Взаимодействие с объектом
+    /// Скрывает UIText
+    /// </summary>
+    public void HideUIText();
+    /// <summary>
+    /// Взаимодействие с интерактивным объектом
     /// </summary>
     public void Interact();
 }
