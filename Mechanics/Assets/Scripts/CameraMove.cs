@@ -1,12 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Осуществляет следование камеры за игроком. Скрипт навешивается на Main camera
+/// </summary>
 public class CameraMove : MonoBehaviour
 {
+    /// <summary>
+    /// Ссылка на transform игрока
+    /// </summary>
     [SerializeField] private Transform _player;
+    /// <summary>
+    /// Transform камеры
+    /// </summary>
     private Transform _trans;
     public float speed;
+    /// <summary>
+    /// Позиция на которой камера держится относительно игрока
+    /// </summary>
     public Vector3 offset;
 
     private void Start()
@@ -16,8 +26,8 @@ public class CameraMove : MonoBehaviour
     // Update is called once per frame
     private void LateUpdate()
     {
-        Vector3 Distance = _player.position + offset;
-        Vector3 NewPos = Vector3.Lerp(_trans.position, Distance, speed * Time.deltaTime);
-        _trans.position = NewPos;
+        Vector3 distance = _player.position + offset;
+        Vector3 newPos = Vector3.Lerp(_trans.position, distance, speed * Time.deltaTime);
+        _trans.position = newPos;
     }
 }

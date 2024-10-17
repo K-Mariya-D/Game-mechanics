@@ -2,13 +2,15 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Класс Fader отвечает за затемнение и осветления экрана
+/// Класс Fader отвечает за затемнение и осветления экрана. Скрипт навешивается на префаб с картинкой для затемнения
 /// </summary>
 public class Fader : MonoBehaviour
 {
-    private static Fader _instance;
-    [SerializeField] private Animator animator;
 
+    private static Fader _instance;
+    [SerializeField] private Animator _animator;
+
+    //Для отслеживания завершения методов в SceneManeger
     private Action _fadeInCallback;
     private Action _fadeOutCallback;
     public static Fader Instance
@@ -30,7 +32,7 @@ public class Fader : MonoBehaviour
     public void FadeIn(Action fadeInCallback)
     {
         _fadeInCallback = fadeInCallback;
-        animator.SetBool(name: "isFaded", false);
+        _animator.SetBool(name: "isFaded", false);
     }
     /// <summary>
     /// Осветляет экран
@@ -39,7 +41,7 @@ public class Fader : MonoBehaviour
     public void FadeOut(Action fadeOutCallback)
     {
         _fadeOutCallback = fadeOutCallback;
-        animator.SetBool(name: "isFaded", true);
+        _animator.SetBool(name: "isFaded", true);
     }
     /// <summary>
     /// Вызывает указанный делегат после затемнения экрана
