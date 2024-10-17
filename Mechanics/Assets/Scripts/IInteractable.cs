@@ -27,32 +27,17 @@ public interface IInteractable
     /// </summary>
     public string Description { get; }
     /// <summary>
-    /// Метод, вызывающийся при входе CallObject в Collider
+    /// Находится ли объект в состоянии взаимодействия
     /// </summary>
-    /// <param name="collision"></param>
-    public void OnTriggerEnter2D(Collider2D collision);
-    /// <summary>
-    /// Метод, вызывающийся, когда CallObject стоит в Collider 
-    /// </summary>
-    /// <param name="collision"></param>
-    public void OnTriggerStay2D(Collider2D collision);
-    /// <summary>
-    /// Метод, вызывающийся при выходе CallObject из Collider
-    /// </summary>
-    /// <param name="collision"></param>
-    public void OnTriggerExit2D(Collider2D collision);
+    public bool IsReadyInteractable { get; }
     /// <summary>
     /// Корректно устанавливает текст на экране
     /// </summary>
     public void PlaceUIText();
     /// <summary>
-    /// Отображает UIText
+    /// Определяет состояние UIText в соответствие с IsReadyInteractable
     /// </summary>
-    public void ShowUIText();
-    /// <summary>
-    /// Скрывает UIText
-    /// </summary>
-    public void HideUIText();
+    void SetUIText();
     /// <summary>
     /// Взаимодействие с интерактивным объектом
     /// </summary>

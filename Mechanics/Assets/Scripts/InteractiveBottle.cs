@@ -82,7 +82,7 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
     /// <summary>
     /// Метод, вызывающийся при старте сцены
     /// </summary>
-    private void Start()
+    public void Start()
     {
         //Настройка UIText
         Canvas canvas = GameObject.FindObjectOfType<Canvas>();
@@ -97,6 +97,10 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
         Collider.radius = Distance; //Установка радиуса Collider
         Collider.isTrigger = true; //Установка триггера
     }
+    public void Update()
+    {
+        Interact(); //Взаимодействие с интерактивным объектом
+    }
     /// <summary>
     /// Метод, вызывающийся при входе CallObject в Collider
     /// </summary>
@@ -105,19 +109,9 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
     {
         if (collision != null && collision.CompareTag(CallObject.tag))
         {
+            IsReadyInteractable = true;
             PlaceUIText(); //Определение положения UIText на экране
-            ShowUIText(); //Отображение UIText
-        }
-    }
-    /// <summary>
-    /// Метод, вызывающийся, когда CallObject стоит в Collider 
-    /// </summary>
-    /// <param name="collision"></param>
-    public void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision != null && collision.CompareTag(CallObject.tag))
-        {
-            Interact(); //Взаимодействие с интерактивным объектом
+            SetUIText(); //Отображение UIText
         }
     }
     /// <summary>
@@ -128,7 +122,8 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
     {
         if (collision != null && collision.CompareTag(CallObject.tag))
         {
-            HideUIText(); //Скрытие UIText
+            IsReadyInteractable = false;
+            SetUIText(); //Скрытие UIText
         }
     }
     /// <summary>
@@ -138,11 +133,7 @@ public class InteractiveBottle : MonoBehaviour, IInteractable
     /// <summary>
     /// Отображает UIText
     /// </summary>
-    public void ShowUIText() => UIText.gameObject.SetActive(true);
-    /// <summary>
-    /// Скрывает UIText
-    /// </summary>
-    public void HideUIText() => UIText.gameObject.SetActive(false);
+    public void SetUIText() => UIText.gameObject.SetActive(IsReadyInteractable);
     /// <summary>
     /// Взаимодействие с интерактивным объектом
     /// </summary>
