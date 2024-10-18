@@ -13,6 +13,10 @@ public interface IGrenade
     /// </summary>
     public GameObject Prefab { get; }
     /// <summary>
+    /// С какой скоростью летит гранат
+    /// </summary>
+    public float Speed { get; }
+    /// <summary>
     /// Метод бросание гранаты
     /// </summary>
     public void ThrowGranade();
