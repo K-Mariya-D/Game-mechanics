@@ -20,6 +20,9 @@ public class Grenade : MonoBehaviour, IGrenade
                 _prefab = Resources.Load<GameObject>("Grenade"); 
             return _prefab; } 
     }
+    /// <summary>
+    /// Бросок гранаты
+    /// </summary>
     public void ThrowGranade()
     {
         GameObject grenade = Instantiate(Prefab, this.transform.position, Quaternion.identity);

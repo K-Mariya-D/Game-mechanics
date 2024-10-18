@@ -16,5 +16,6 @@ public class grenade1 : MonoBehaviour
     {
         Debug.Log("Триггер сработал!");
         _camera.GetComponent<ShakeEffect>().ShakeCamera(0.5f, 0.3f, null);
+        Destroy(this.gameObject);
     }
 }

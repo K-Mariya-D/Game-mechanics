@@ -65,8 +65,16 @@ public class Player : MonoBehaviour, IMoving, IRunning
     }
     void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+        //Для того, чтобы кнопка не нажималась дважды
+        bool flag = false;
+
+        if (Input.GetKeyDown(KeyCode.Mouse1) && !flag)
+        {
+            flag = true;
             GetComponent<Grenade>().ThrowGranade();
+        }
+        if (Input.GetKeyUp(KeyCode.Mouse1))
+            flag = false; 
     }
     /// <summary>
     /// Перемещение игрока
