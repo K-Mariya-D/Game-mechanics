@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class ShakeEffect : MonoBehaviour
 {
-    //Картинка для затемнения/осветления экрана
-    [SerializeField] private Image fader;
     private Action _shakeCallback;
 
     /// <summary>
