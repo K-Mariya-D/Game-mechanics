@@ -1,14 +1,20 @@
-using System.Collections;
+п»їusing System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// Фиксирует столкновение гранаты с другими обектами (Collodir2D Ridgitbody2D). Скрипт навешивается на префаб гранаты
+/// Р¤РёРєСЃРёСЂСѓРµС‚ СЃС‚РѕР»РєРЅРѕРІРµРЅРёРµ РіСЂР°РЅР°С‚С‹ СЃ РґСЂСѓРіРёРјРё РѕР±РµРєС‚Р°РјРё (Collodir2D Ridgitbody2D). РЎРєСЂРёРїС‚ РЅР°РІРµС€РёРІР°РµС‚СЃСЏ РЅР° РїСЂРµС„Р°Р± РіСЂР°РЅР°С‚С‹
 /// </summary>
 public class grenade1 : MonoBehaviour
 {
     /// <summary>
-    /// Столкнулась ли граната с чем-либо 
+    /// РљРѕРЅРµС‡РЅР°СЏ РїРѕР·РёС†РёСЏ РіСЂР°РЅР°С‚С‹
+    /// </summary>
+    public Vector3 EndPos { get; set; }
+
+    /// <summary>
+    /// РЎС‚РѕР»РєРЅСѓР»Р°СЃСЊ Р»Рё РіСЂР°РЅР°С‚Р° СЃ С‡РµРј-Р»РёР±Рѕ 
     /// </summary>
     public bool Collision { get; private set; }
 
@@ -16,12 +22,22 @@ public class grenade1 : MonoBehaviour
     {
         Collision = false;
     }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Триггер сработал!");
+        Debug.Log("РўСЂРёРіРіРµСЂ СЃСЂР°Р±РѕС‚Р°Р»!");
         Collision = true;
-        //Удаляет обект с задежкой. (Без задержки скрипт Grenade не успевает получить инфу о столкновении)
+        //РЈРґР°Р»СЏРµС‚ РѕР±РµРєС‚ СЃ Р·Р°РґРµР¶РєРѕР№. (Р‘РµР· Р·Р°РґРµСЂР¶РєРё СЃРєСЂРёРїС‚ Grenade РЅРµ СѓСЃРїРµРІР°РµС‚ РїРѕР»СѓС‡РёС‚СЊ РёРЅС„Сѓ Рѕ СЃС‚РѕР»РєРЅРѕРІРµРЅРёРё)
         Destroy(gameObject, 0.1f);
+    }
+    
+    private void Update()
+    {
+       // Debug.Log(transform.position);
+        //Debug.Log(EndPos);
+        if (transform.position.x == EndPos.x && transform.position.y == EndPos.y)
+        {
+            Collision = true;
+            Destroy(gameObject, 0.1f);
+        }
     }
 }

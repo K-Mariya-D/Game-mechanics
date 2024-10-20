@@ -19,5 +19,5 @@ public interface IGrenade
     /// <summary>
     /// Метод бросание гранаты
     /// </summary>
-    //public void ThrowGranade();
+    public void ThrowGranade();
 }

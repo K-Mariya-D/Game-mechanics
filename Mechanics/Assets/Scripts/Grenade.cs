@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// Класс для броска гранаты. Скрипт навешивается на игрока
@@ -33,6 +34,8 @@ public class Grenade : MonoBehaviour, IGrenade
 
     public void ThrowGranade()
     {
+        _trans = GetComponent<Transform>();
+        Debug.Log(_trans.position);
         StartCoroutine(_ThrowGranade());
     }
 
@@ -41,42 +44,42 @@ public class Grenade : MonoBehaviour, IGrenade
     /// </summary>
     public IEnumerator _ThrowGranade()
     {
-        _trans = GetComponent<Transform>();
-
-        grenade = Instantiate(Prefab, this.transform.position, Quaternion.identity);
+        grenade = Instantiate(Prefab, _trans.position, Quaternion.identity);
 
         Vector2 cursor = Input.mousePosition;
         cursor = Camera.ScreenToWorldPoint(cursor);
 
 
         Vector2 startPoint = _trans.position; //Стартовая позиция
+        Debug.Log(startPoint);
         Vector2 endPoint = new Vector3(cursor.x, _trans.position.y); //Конечная позиция (Не сам курсор, а точка под ним на уровне игрока)
+        Debug.Log(endPoint);
         float amplitude = Math.Abs(_trans.position.y - cursor.y); //Амплитуда броска (Высота на которой находиться курсор по отношению к ироку)
         float time = 2f;
-
+        
+        //Координаты, в которых граната должна взорваться
+        float x = Mathf.Lerp(startPoint.x, endPoint.x, (float)1.5/2);
+        float angle = Mathf.Lerp(0, Mathf.PI, (float)1.5/2);
+        float y = amplitude * Mathf.Sin(angle);
+        
+        grenade.GetComponent<grenade1>().EndPos = new Vector3(x, y, 0);
+        
         float elapsedTime = 0f;
 
         while (elapsedTime < time)
         {
             float t = elapsedTime / time; // Нормализуем время (Для того, чтобы отмерить как должны были за этот промежуток измениться координаты)
-            float angle = Mathf.Lerp(0, Mathf.PI, t); // Линейная интерполяция угла от 0 до π (полукруг)
+            angle = Mathf.Lerp(0, Mathf.PI, t); // Линейная интерполяция угла от 0 до π (полукруг)
 
             // Вычисляем координаты
-            float x = Mathf.Lerp(startPoint.x, endPoint.x, t); 
-            float y = amplitude * Mathf.Sin(angle); // По y передвигаемся по синусоиде
+            x = Mathf.Lerp(startPoint.x, endPoint.x, t); 
+            y = amplitude * Mathf.Sin(angle) + Mathf.Min(startPoint.y, endPoint.y); ; // По y передвигаемся по синусоиде (Минимальная координа по y для корректировки движения)
 
-            grenade.transform.position = new Vector3(x, y);
+            grenade.transform.position = new Vector3(x, y, 0);
 
             elapsedTime += Time.deltaTime;
             yield return null; // Ждем следующего кадра
         }
-
-        /*
-        //Нормализация вектора движения. Уменьшает длинну вектора, зато повышает точность направления полёта 
-        distance = (distance - grenade.transform.position).normalized;
-
-        grenade.GetComponent<Rigidbody2D>().AddForce(distance * Speed, ForceMode2D.Impulse);
-        */
         StartCoroutine(CrashEffect());
     }
     /// <summary>
@@ -95,7 +98,7 @@ public class Grenade : MonoBehaviour, IGrenade
 
         Debug.Log("Запуск тряски!");
 
-        float dist = Vector3.Distance(this.transform.position, grenade.transform.position);
+        float dist = Vector3.Distance(transform.position, grenade.transform.position);
 
         Debug.Log(dist);
 
@@ -105,5 +108,4 @@ public class Grenade : MonoBehaviour, IGrenade
         else Camera.GetComponent<ShakeEffect>().ShakeCamera(0.5f, 0.08f, null);
   
     }
- 
 }
