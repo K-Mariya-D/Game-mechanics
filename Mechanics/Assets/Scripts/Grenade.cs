@@ -56,56 +56,26 @@ public class Grenade : MonoBehaviour, IGrenade
         Debug.Log(endPoint);
         float amplitude = Math.Abs(_trans.position.y - cursor.y); //Амплитуда броска (Высота на которой находиться курсор по отношению к ироку)
         float time = 2f;
-        
-        //Координаты, в которых граната должна взорваться
-        float x = Mathf.Lerp(startPoint.x, endPoint.x, (float)1.5/2);
-        float angle = Mathf.Lerp(0, Mathf.PI, (float)1.5/2);
-        float y = amplitude * Mathf.Sin(angle);
-        
-        grenade.GetComponent<grenade1>().EndPos = new Vector3(x, y, 0);
-        
+
+        grenade.GetComponent<grenade1>().timeToStop = time * (3f/4f);
         float elapsedTime = 0f;
 
         while (elapsedTime < time)
         {
             float t = elapsedTime / time; // Нормализуем время (Для того, чтобы отмерить как должны были за этот промежуток измениться координаты)
-            angle = Mathf.Lerp(0, Mathf.PI, t); // Линейная интерполяция угла от 0 до π (полукруг)
+            float angle = Mathf.Lerp(0, Mathf.PI, t); // Линейная интерполяция угла от 0 до π (полукруг)
 
             // Вычисляем координаты
-            x = Mathf.Lerp(startPoint.x, endPoint.x, t); 
-            y = amplitude * Mathf.Sin(angle) + Mathf.Min(startPoint.y, endPoint.y); ; // По y передвигаемся по синусоиде (Минимальная координа по y для корректировки движения)
+            float x = Mathf.Lerp(startPoint.x, endPoint.x, t); 
+            float y = amplitude * Mathf.Sin(angle) + Mathf.Min(startPoint.y, endPoint.y); ; // По y передвигаемся по синусоиде (Минимальная координа по y для корректировки движения)
 
-            grenade.transform.position = new Vector3(x, y, 0);
-
+            if (grenade != null)
+                grenade.transform.position = new Vector3(x, y, 0);
+            else StopCoroutine(_ThrowGranade());
+            
             elapsedTime += Time.deltaTime;
+
             yield return null; // Ждем следующего кадра
         }
-        StartCoroutine(CrashEffect());
-    }
-    /// <summary>
-    /// Запускает тряску после столкновении гранаты с чем-либо
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator CrashEffect()
-    {
-        bool chash = grenade.GetComponent<grenade1>().Collision;
-
-        while (!chash)
-        {
-            chash = grenade.GetComponent<grenade1>().Collision;
-            yield return null;
-        }
-
-        Debug.Log("Запуск тряски!");
-
-        float dist = Vector3.Distance(transform.position, grenade.transform.position);
-
-        Debug.Log(dist);
-
-        //Тряска тем больше, чем ближе к игроку упала граната 
-        if (dist <= 5) Camera.GetComponent<ShakeEffect>().ShakeCamera(0.5f, 0.6f, null);
-        else if (dist <= 10) Camera.GetComponent<ShakeEffect>().ShakeCamera(0.5f, 0.3f, null);
-        else Camera.GetComponent<ShakeEffect>().ShakeCamera(0.5f, 0.08f, null);
-  
     }
 }

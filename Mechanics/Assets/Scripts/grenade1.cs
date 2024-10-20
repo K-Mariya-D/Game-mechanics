@@ -4,40 +4,48 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// Фиксирует столкновение гранаты с другими обектами (Collodir2D Ridgitbody2D). Скрипт навешивается на префаб гранаты
+/// Фиксирует столкновение гранаты с другими обектами (Collodir2D Ridgitbody2D) и вызывает взрыв. Скрипт навешивается на префаб гранаты
 /// </summary>
 public class grenade1 : MonoBehaviour
 {
     /// <summary>
-    /// Конечная позиция гранаты
+    /// Когда граната должна взорваться
     /// </summary>
-    public Vector3 EndPos { get; set; }
-
-    /// <summary>
-    /// Столкнулась ли граната с чем-либо 
-    /// </summary>
-    public bool Collision { get; private set; }
+    public float timeToStop;
+    private float _timer = 0;
+    private Camera _camera;
+    private GameObject _player;
 
     private void Start()
     {
-        Collision = false;
+        _camera = Camera.main;
+        _player = GameObject.FindGameObjectWithTag("Player"); 
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Триггер сработал!");
-        Collision = true;
-        //Удаляет обект с задежкой. (Без задержки скрипт Grenade не успевает получить инфу о столкновении)
         Destroy(gameObject, 0.1f);
+        Crash();
     }
-    
+
     private void Update()
     {
-       // Debug.Log(transform.position);
-        //Debug.Log(EndPos);
-        if (transform.position.x == EndPos.x && transform.position.y == EndPos.y)
+        if (_timer >= timeToStop)
         {
-            Collision = true;
             Destroy(gameObject, 0.1f);
+            Crash();
         }
+        _timer += Time.deltaTime;
+    }
+    private void Crash()
+    {
+        float dist = Vector3.Distance(_player.transform.position, transform.position);
+
+        //Debug.Log(dist);
+
+        //Тряска тем больше, чем ближе к игроку упала граната 
+        if (dist <= 5) _camera.GetComponent<ShakeEffect>().ShakeCamera(0.5f, 0.6f, null);
+        else if (dist <= 10) _camera.GetComponent<ShakeEffect>().ShakeCamera(0.5f, 0.3f, null);
+        else _camera.GetComponent<ShakeEffect>().ShakeCamera(0.5f, 0.08f, null);
     }
 }
