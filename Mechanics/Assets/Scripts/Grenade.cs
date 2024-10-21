@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 public class Grenade : MonoBehaviour, IGrenade
 {
     //Для позиции игрока
-    private Transform _trans;
+    private Transform _trans ;
     //Граната
     private GameObject grenade;
 
@@ -29,13 +29,15 @@ public class Grenade : MonoBehaviour, IGrenade
                 _prefab = Resources.Load<GameObject>("Grenade"); 
             return _prefab; } 
     }
-    private float _speed = 20f;
-    public float Speed { get => _speed; }
+    private float _time = 1.3f; 
+    public float Time { get => _time; }
 
-    public void ThrowGranade()
+    private void Start()
     {
         _trans = GetComponent<Transform>();
-        Debug.Log(_trans.position);
+    }
+    public void ThrowGranade()
+    {
         StartCoroutine(_ThrowGranade());
     }
 
@@ -49,20 +51,17 @@ public class Grenade : MonoBehaviour, IGrenade
         Vector2 cursor = Input.mousePosition;
         cursor = Camera.ScreenToWorldPoint(cursor);
 
-
         Vector2 startPoint = _trans.position; //Стартовая позиция
-        Debug.Log(startPoint);
         Vector2 endPoint = new Vector3(cursor.x, _trans.position.y); //Конечная позиция (Не сам курсор, а точка под ним на уровне игрока)
-        Debug.Log(endPoint);
         float amplitude = Math.Abs(_trans.position.y - cursor.y); //Амплитуда броска (Высота на которой находиться курсор по отношению к ироку)
-        float time = 2f;
 
-        grenade.GetComponent<grenade1>().timeToStop = time * (3f/4f);
+        grenade.GetComponent<grenade1>().TimeToStop = Time * 0.65f;
+
         float elapsedTime = 0f;
 
-        while (elapsedTime < time)
+        while (elapsedTime < Time)
         {
-            float t = elapsedTime / time; // Нормализуем время (Для того, чтобы отмерить как должны были за этот промежуток измениться координаты)
+            float t = elapsedTime / Time; // Нормализуем время (Для того, чтобы отмерить как должны были за этот промежуток измениться координаты)
             float angle = Mathf.Lerp(0, Mathf.PI, t); // Линейная интерполяция угла от 0 до π (полукруг)
 
             // Вычисляем координаты
@@ -73,7 +72,7 @@ public class Grenade : MonoBehaviour, IGrenade
                 grenade.transform.position = new Vector3(x, y, 0);
             else StopCoroutine(_ThrowGranade());
             
-            elapsedTime += Time.deltaTime;
+            elapsedTime += UnityEngine.Time.deltaTime;
 
             yield return null; // Ждем следующего кадра
         }

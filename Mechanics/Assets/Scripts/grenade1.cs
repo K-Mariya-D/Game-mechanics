@@ -11,7 +11,7 @@ public class grenade1 : MonoBehaviour
     /// <summary>
     /// Когда граната должна взорваться
     /// </summary>
-    public float timeToStop;
+    public float TimeToStop { get; set; }
     private float _timer = 0;
     private Camera _camera;
     private GameObject _player;
@@ -22,6 +22,10 @@ public class grenade1 : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player"); 
     }
 
+    /// <summary>
+    /// Если произошло столкновение с другим объектом
+    /// </summary>
+    /// <param name="collision"></param>
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Destroy(gameObject, 0.1f);
@@ -30,18 +34,19 @@ public class grenade1 : MonoBehaviour
 
     private void Update()
     {
-        if (_timer >= timeToStop)
+        if (_timer >= TimeToStop)
         {
             Destroy(gameObject, 0.1f);
             Crash();
         }
-        _timer += Time.deltaTime;
+        else _timer += Time.deltaTime;
     }
+    /// <summary>
+    /// Вызывает тряску после уничтожения гранаты 
+    /// </summary>
     private void Crash()
     {
         float dist = Vector3.Distance(_player.transform.position, transform.position);
-
-        //Debug.Log(dist);
 
         //Тряска тем больше, чем ближе к игроку упала граната 
         if (dist <= 5) _camera.GetComponent<ShakeEffect>().ShakeCamera(0.5f, 0.6f, null);

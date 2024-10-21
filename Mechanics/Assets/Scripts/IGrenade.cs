@@ -13,9 +13,9 @@ public interface IGrenade
     /// </summary>
     public GameObject Prefab { get; }
     /// <summary>
-    /// С какой скоростью летит гранат
+    /// За какое время совершается бросок
     /// </summary>
-    public float Speed { get; }
+    public float Time { get; }
     /// <summary>
     /// Метод бросание гранаты
     /// </summary>

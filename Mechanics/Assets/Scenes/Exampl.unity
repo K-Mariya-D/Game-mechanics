@@ -371,7 +371,7 @@ GameObject:
   - component: {fileID: 1131822958}
   m_Layer: 0
   m_Name: Square
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -469,7 +469,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158afb238da3b8f419f0d68c0f10d0e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 256079084}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
