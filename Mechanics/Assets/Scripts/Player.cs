@@ -62,6 +62,8 @@ public class Player : MonoBehaviour, IMoving, IRunning
     {
         CheckBoost();
         Move();
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+            GetComponent<Grenade>().ThrowGranade();
     }
     /// <summary>
     /// Перемещение игрока

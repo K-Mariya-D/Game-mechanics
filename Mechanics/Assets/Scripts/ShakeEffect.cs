@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Класс реализующий эффект тряски экрана. Скрипт навешивается на объект Main camera
+/// </summary>
 public class ShakeEffect : MonoBehaviour
 {
-    //Картинка для затемнения/осветления экрана
-    [SerializeField] private Image fader;
+    //Используется в скрипте SceneMameger для ожидания завершения работы метода
     private Action _shakeCallback;
 
     /// <summary>
@@ -36,7 +39,9 @@ public class ShakeEffect : MonoBehaviour
             time -= Time.deltaTime;
         }
         camera.position = startPose;
-        shakeCallback.Invoke();
+
+        if (shakeCallback != null)
+            shakeCallback.Invoke();
     }
 
 }
