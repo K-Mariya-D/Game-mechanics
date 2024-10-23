@@ -58,7 +58,7 @@ public class Player : MonoBehaviour, IMoving, IRunning
     {
         Trans = this.GetComponent<Transform>();
     }
-    void Update()
+    private void Update()
     {
         CheckBoost();
         Move();
@@ -70,9 +70,11 @@ public class Player : MonoBehaviour, IMoving, IRunning
     /// </summary>
     public void Move()
     {
+        //Debug.Log("Move()");
         IsMoving = false;
         if (Input.GetKey(KeyCode.A))
         {
+            Debug.Log("Move()");
             Trans.position += Vector3.left * Speed() * Time.deltaTime;
             IsMoving = true;
         }
