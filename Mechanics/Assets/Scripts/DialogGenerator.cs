@@ -25,7 +25,6 @@ public class DialogGenerator : MonoBehaviour
         public string npcText;
         public PlayerAnswer[] playerAnswer;
     }
-
     /// <summary>
     /// Класс ответа игрока на реплику: Текст, к какой реплике перейти после, конечный ли ответ
     /// </summary>
@@ -34,7 +33,7 @@ public class DialogGenerator : MonoBehaviour
     {
         public string text;
         public int toNode;
-        public bool exit;
+        public bool exit; //конечный ли ответ
     }
     /// <summary>
     /// Генератор диалога
@@ -43,10 +42,12 @@ public class DialogGenerator : MonoBehaviour
     {
         string path = Application.dataPath + "/Dialogues/" + FileName + ".xml";
         
+        //Переменные для создания реплик и ответов к ним соответственно 
         XmlNode userNode;
         XmlElement element;
 
-        XmlDocument xmlDoc = new XmlDocument();
+        //Создание самого файла и корнегого node'а в нём
+        XmlDocument xmlDoc = new XmlDocument();  
         XmlNode rootNode = xmlDoc.CreateElement("dialogue");
         XmlAttribute attribute = xmlDoc.CreateAttribute("name");
         attribute.Value = FileName;
@@ -55,6 +56,7 @@ public class DialogGenerator : MonoBehaviour
 
         for (int j = 0; j < Nodes.Length; j++)
         {
+            //Создание очередного node'а (заполнение его id и текста реплики npc)
             userNode = xmlDoc.CreateElement("node");
             attribute = xmlDoc.CreateAttribute("id");
             attribute.Value = j.ToString();
@@ -63,6 +65,7 @@ public class DialogGenerator : MonoBehaviour
             attribute.Value = Nodes[j].npcText;
             userNode.Attributes.Append(attribute);
 
+            //В нутри созданного node'а заполнение возможных ответов игрока
             for (int i = 0; i < Nodes[j].playerAnswer.Length; i++)
             {
                 element = xmlDoc.CreateElement("answer");
