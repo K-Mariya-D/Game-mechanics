@@ -2,10 +2,21 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
+/// <summary>
+/// Заметка: SceneManeger - singlton? 
+/// Класс менеджера сцены. Осуществляет переход между сценами, а также визуальные эффекты в самой сцене.
+/// Скрипт навешивается на любой Empti обект на сцене
+/// </summary>
 public class SceneManeger : MonoBehaviour
 {
-    [SerializeField] private GameObject camera;
-    private bool WaitFade;
+    /// <summary>
+    /// Ссылка на Main camera
+    /// </summary>
+    [SerializeField] private GameObject _camera;
+    /// <summary>
+    /// Флаг, показываюший закончила ли очередная функция свою работу
+    /// </summary>
+    private bool _wait;
 
     // Start is called before the first frame update
     void Start()
@@ -15,35 +26,35 @@ public class SceneManeger : MonoBehaviour
 
     private IEnumerator Manager()
     {
-        WaitFade = true;
+        _wait = true;
         Debug.Log("Начало Осветления");
 
-        Fader.Instance.FadeOut(() => WaitFade = false);
+        Fader.Instance.FadeOut(() => _wait = false);
         
         // Пока осветляется экран ничего не делаем
-        while (WaitFade)
+        while (_wait)
             yield return null;
 
 
         Debug.Log("Конец осветления. Начало тряски");
 
-        WaitFade = true;
-        camera.GetComponent<ShakeEffect>().ShakeCamera(0.7f, 0.6f, () => WaitFade = false);
+        _wait = true;
+        _camera.GetComponent<ShakeEffect>().ShakeCamera(0.7f, 0.6f, () => _wait = false);
         
-        while (WaitFade)
+        while (_wait)
             yield return null;
 
-
-        WaitFade = true;
+        _wait = true;
         Debug.Log("Начало Затемнения");
         
-        Fader.Instance.FadeIn(() => WaitFade = false);
+        Fader.Instance.FadeIn(() => _wait = false);
 
-        while (WaitFade)
+        while (_wait)
             yield return null;
 
         Debug.Log("Конец Затемнения. Переключение сцены");
 
+        //После затемнения камеры переход на новую сцену 
         SceneManager.LoadScene("ExampleSceneTwo"); 
     }
 }
