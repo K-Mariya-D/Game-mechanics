@@ -12,8 +12,10 @@ public class InstantiateDialogue : MonoBehaviour
     public Font font; //Шрифт текста в кнопках
 
     private Dialogue _dialogue;
-    private TextMeshProUGUI _replicText;
+    [SerializeField]
+    private Transform _panel;
     private Button _continue;
+    private GameObject replic;
     private TextMeshProUGUI _npcName;
     private int _nodeInd;
     private bool _WasAnsw;
@@ -36,15 +38,13 @@ public class InstantiateDialogue : MonoBehaviour
         {
             Debug.Log("Печать следующей реплики");
             _WasAnsw = false;
-            _dialogueWindow.transform.GetChild(2).gameObject.SetActive(true);
             foreach (GameObject btn in _buttons) { Destroy(btn.gameObject); }
             PrintReplic(_dialogue.Nodes[_nodeInd].npcText);
         }
         else //Иначе -> вывод на экран ответов к текущей реплике
         {
             Debug.Log("Печать ответов к текущей реплике");
-            _replicText.text = "";
-            _dialogueWindow.transform.GetChild(2).gameObject.SetActive(false);
+            Destroy(replic.gameObject);
             _WasAnsw = true;
             CreateAnswers(_dialogue.Nodes[_nodeInd].answers);
         }
@@ -62,11 +62,10 @@ public class InstantiateDialogue : MonoBehaviour
     {
         _dialogueWindow.SetActive(true);
         _npcName = _dialogueWindow.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        _replicText = _dialogueWindow.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        _panel = _dialogueWindow.transform.GetChild(2).GetComponent<Transform>();
         _continue = _dialogueWindow.transform.GetChild(3).GetComponent<Button>();
         _npcName.text = NPCName;
 
-        _replicText.text = "";
         _continue.onClick.RemoveAllListeners();
         _continue.onClick.AddListener(ToNextReplic);
 
@@ -81,13 +80,17 @@ public class InstantiateDialogue : MonoBehaviour
     /// <returns></returns>
     private IEnumerator PrintReplic(string text)
     {
+        replic = new GameObject("replic", typeof(TextMeshProUGUI));
+        replic.GetComponent<TextMeshProUGUI>().text = "";
+        replic.transform.SetParent(_panel);
+
         Debug.Log("Метод PrintReplic запущен");
         float speed = 0.2f;
         int i = 0;
 
         while (i < text.Length)
         {
-            _replicText.text += text[i];
+            replic.GetComponent<TextMeshProUGUI>().text += text[i];
             i++;
             yield return new WaitForSeconds(speed);
         }
@@ -108,13 +111,26 @@ public class InstantiateDialogue : MonoBehaviour
             GameObject btn = new GameObject("btn" + i, typeof(Image), typeof(Button));
             Color color = btn.GetComponent<Image>().color;
             color.a = 0;
-            //Создание текста в кнопке
             btn.GetComponent<Image>().color = color;
+            btn.transform.SetParent(_panel.GetComponent<VerticalLayoutGroup>().transform);
+            //Настройка положения кнопки на панеле
+            RectTransform btnRect = btn.GetComponent<RectTransform>();
+            btnRect.SetParent(_panel);
+            btnRect.localScale = Vector2.one;
+
+            //Создание текста в кнопке
             GameObject txt = new GameObject("txt" + i, typeof(Text));
             txt.transform.SetParent(btn.transform);
             txt.GetComponent<Text>().font = font;
             txt.GetComponent<Text>().text = arr[i].text;
             txt.GetComponent<Text>().color = Color.white;
+            txt.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
+            RectTransform rt = txt.GetComponent<RectTransform>();
+            //Настройка позиции текста в кнопке
+            rt.SetParent(btnRect);
+            rt.localScale = Vector2.one;
+            rt.localPosition = Vector2.zero;
+
             //Присвоение кнопке действия
             btn.GetComponent<Button>().onClick.AddListener(() =>
             {
@@ -123,7 +139,7 @@ public class InstantiateDialogue : MonoBehaviour
                 _nodeInd = arr[i].toNode;
                 ToNextReplic();
             });
-            btn.transform.SetParent(_dialogueWindow.transform);
+            
             _buttons.Append(btn);
         }
     }
@@ -131,7 +147,6 @@ public class InstantiateDialogue : MonoBehaviour
     {
         _dialogueWindow.SetActive(false);
         _nodeInd = 0;
-        _replicText.text = "";
     }
 
 }
