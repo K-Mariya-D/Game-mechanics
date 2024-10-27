@@ -7,7 +7,7 @@ using UnityEngine;
 /// Читает xml-файл и создаёт диалог (массив node'ов)
 /// </summary>
 [XmlRoot("dialogue")]
-public class DialogueReader
+public class Dialogue
 {
     [XmlElement("node")]
     public Node[] Nodes;
@@ -28,13 +28,13 @@ public class DialogueReader
         [XmlAttribute("id")]
         public int toNode;
         [XmlAttribute("exit")]
-        public bool exit;
+        public string exit;
     }
-    public static DialogueReader Load(TextAsset _xml)
+    public static Dialogue Load(TextAsset _xml)
     { 
-        XmlSerializer serializer = new XmlSerializer(typeof(DialogueReader));
+        XmlSerializer serializer = new XmlSerializer(typeof(Dialogue));
         StringReader sr = new StringReader(_xml.text);
-        DialogueReader dialogue = serializer.Deserialize(sr) as DialogueReader;
+        Dialogue dialogue = serializer.Deserialize(sr) as Dialogue;
         return dialogue;
     }
 }
