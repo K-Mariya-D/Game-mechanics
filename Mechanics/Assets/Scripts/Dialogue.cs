@@ -25,7 +25,7 @@ public class Dialogue
     {
         [XmlAttribute("text")]
         public string text;
-        [XmlAttribute("id")]
+        [XmlAttribute("toNode")]
         public int toNode;
         [XmlAttribute("exit")]
         public string exit;
