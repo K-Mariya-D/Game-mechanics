@@ -1,22 +1,22 @@
-using System.Collections;
+п»їusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Интерфейс, поддерживающий бегающие объекты
+/// РРЅС‚РµСЂС„РµР№СЃ, РїРѕРґРґРµСЂР¶РёРІР°СЋС‰РёР№ Р±РµРіР°СЋС‰РёРµ РѕР±СЉРµРєС‚С‹
 /// </summary>
 public interface IRunning
 {
     /// <summary>
-    /// Каркас
+    /// РљР°СЂРєР°СЃ
     /// </summary>
     public Transform Trans { get; }
     /// <summary>
-    /// Скорость бега
+    /// РЎРєРѕСЂРѕСЃС‚СЊ Р±РµРіР°
     /// </summary>
     float RunSpeed { get; }
     /// <summary>
-    /// Состояние передвижения бегом
+    /// РЎРѕСЃС‚РѕСЏРЅРёРµ РїРµСЂРµРґРІРёР¶РµРЅРёСЏ Р±РµРіРѕРј
     /// </summary>
     bool IsRunning { get; }
 }
