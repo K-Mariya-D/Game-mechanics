@@ -1,11 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// —крипт навешиваетс€ на NPS
+/// </summary>
 public class ShowDialogue : MonoBehaviour
 {
     public TextAsset FileName;
@@ -17,7 +17,11 @@ public class ShowDialogue : MonoBehaviour
     private Transform _panel;
     private Button _continue;
     private TextMeshProUGUI _npcName;
+
+    bool IsPrinting;
     private int _nodeInd;
+    private int _replicInd; //“екущий символ репики (дл€ разделени€ на текста на несколько частей)
+    private const int _maxReplicLength = 350; //ћаксимальное число символов реплики на экране
     private void Start()
     {
         _dialogue = Dialogue.Load(FileName);
@@ -27,14 +31,45 @@ public class ShowDialogue : MonoBehaviour
     /// </summary>
     private void Continue()
     {
-        //ќчистка панели от реплики npc (если она есть)
-        if (_panel.childCount > 0)
+        Text currentReplic = _panel.GetChild(0).GetComponent<Text>();
+        Debug.Log("0: " + _replicInd + "-" + _dialogue.Nodes[_nodeInd].npcText.Length);
+        //≈сли реплика печатает€ - пропускаем анимацию, если не печатетс€ и не вс€ реплика дописана - переход к следующейчасти реплики. »наче переходим к ответам
+        if (IsPrinting)
         {
-            Text currentReplic = _panel.GetChild(0).GetComponent<Text>();
-            currentReplic.transform.parent = null;
-            Destroy(currentReplic.gameObject); 
+            StopAllCoroutines();
+
+            //ѕопытка переставл€ть _replicInd в правильную позицию (чтобы потом можно было дописать реплику, если была написана не вс€)
+            int i = _dialogue.Nodes[_nodeInd].npcText.Length - 1;
+            char[] chars = new char[] { '!', '.', '?' };
+            Debug.Log(_dialogue.Nodes[_nodeInd].npcText[..i].LastIndexOfAny(chars));
+
+            while (_dialogue.Nodes[_nodeInd].npcText[..i].LastIndexOfAny(chars) > _maxReplicLength)
+            {
+                i = _dialogue.Nodes[_nodeInd].npcText[..i].LastIndexOfAny(chars);
+            }
+
+            currentReplic.text = _dialogue.Nodes[_nodeInd].npcText[..(i + 1)];
+            _replicInd = i;
+            IsPrinting = false;
+            Debug.Log("1: " + _replicInd + "-" + _dialogue.Nodes[_nodeInd].npcText.Length);
         }
-        PrintAnswers();
+        else if (_replicInd < _dialogue.Nodes[_nodeInd].npcText.Length - 1)
+        {
+            currentReplic.transform.parent = null;
+            Destroy(currentReplic.gameObject);
+
+            Debug.Log("2: " + _replicInd);
+            StartCoroutine(PrintReplic(_dialogue.Nodes[_nodeInd].npcText[(_replicInd + 1)..]));
+        }
+        else
+        {
+            _replicInd = 0;
+
+            currentReplic.transform.parent = null;
+            Destroy(currentReplic.gameObject);
+
+            PrintAnswers();
+        }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -53,6 +88,8 @@ public class ShowDialogue : MonoBehaviour
         _continue = _dialogueWindow.transform.GetChild(3).GetComponent<Button>();
         _npcName.text = NPCName;
         _nodeInd = 0;
+        _replicInd = 0;
+        IsPrinting = false;
 
         _continue.onClick.RemoveAllListeners();
         _continue.onClick.AddListener(Continue);
@@ -66,17 +103,22 @@ public class ShowDialogue : MonoBehaviour
     private IEnumerator PrintReplic(string text)
     {
         Debug.Log("ћетод PrintReplic запущен");
-        float speed = 0.02f;
+        IsPrinting = true;
+        float speed = 0.01f;
         int i = 0;
 
         CreateText(_panel,"NpcReplic", "");
         Text replic = _panel.GetChild(0).GetComponent<Text>();
-        while (i < text.Length)
+
+        char[] chars = new char[] { '!', '.', '?' };
+        while (i < text.Length && !(text[i].Equals(chars) && (text.IndexOfAny(chars, i+1) > _maxReplicLength)))
         {
             replic.text += text[i];
             i++;
+            _replicInd++;
             yield return new WaitForSeconds(speed);
         }
+        IsPrinting = false;
         Debug.Log("ћетод PrintReplic завершЄн");
     }
     /// <summary>
@@ -90,26 +132,25 @@ public class ShowDialogue : MonoBehaviour
         Dialogue.Node currentNode = _dialogue.Nodes[_nodeInd];
         Dialogue.Answer[] currentAnswers = currentNode.answers;
 
-        int j = 0;
-
         for (int i = 0; i < currentAnswers.Length; i++)
         {
             GameObject btn =  CreateButton(i.ToString(), currentAnswers[i].text);
-            Debug.Log(i);
-            j = i; 
+
+            int index = i;
+
             btn.GetComponent<Button>().onClick.AddListener(() =>
             {
-                Debug.Log(j);
-                if (currentAnswers[j].exit == "true")  //»спользуетс€ друга€ переменна€, так как если брать i будет использоватьс€ еЄ значение в последний момент (нажатие), а не текуща€ итераци€ цикла
+                Debug.Log(index);
+                if (currentAnswers[index].exit == "true")  //»спользуетс€ друга€ переменна€, так как если брать i будет использоватьс€ еЄ значение в последний момент (нажатие), а не текуща€ итераци€ цикла
                     EndDialogue();
                 else
                 {
-                    Debug.Log(currentAnswers[j].toNode);
-                    _nodeInd = currentAnswers[j].toNode;
+                    _nodeInd = currentAnswers[index].toNode;
                     PrintNode();
                 }
             });
         }
+
     }
     /// <summary>
     /// ¬ыводит на экран реплику npc
@@ -168,7 +209,6 @@ public class ShowDialogue : MonoBehaviour
     private void CreateText(Transform parent, string elemName, string text)
     {
         Debug.Log("ћетод CreateText запущен");
-        Debug.Log(text);
         //—оздание текста 
         GameObject txt = new GameObject("txt" + elemName, typeof(Text));
         txt.transform.SetParent(parent);
