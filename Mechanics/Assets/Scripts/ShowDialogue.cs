@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -18,6 +19,7 @@ public class ShowDialogue : MonoBehaviour
     private Button _continue;
     private TextMeshProUGUI _npcName;
 
+    bool IsTrigger = false; //Для контроля включения диалога
     bool IsPrinting;
     private int _nodeInd;
     private int _replicInd; //Текущий символ репики (для разделения на текста на несколько частей)
@@ -27,18 +29,19 @@ public class ShowDialogue : MonoBehaviour
         _dialogue = Dialogue.Load(FileName);
     }
     /// <summary>
-    /// Переход к выбору ответов по нажатию кнопки _continue
+    /// Переход к выбору ответов/пропуск анимации печати/окончание диалога по нажатию кнопки _continue
     /// </summary>
     private void Continue()
     {
         Text currentReplic = _panel.GetChild(0).GetComponent<Text>();
+
         Debug.Log("0: " + _replicInd + "-" + _dialogue.Nodes[_nodeInd].npcText.Length);
-        //Если реплика печатаетя - пропускаем анимацию, если не печатется и не вся реплика дописана - переход к следующейчасти реплики. Иначе переходим к ответам
+        //Если реплика печатаетя - пропускаем анимацию
         if (IsPrinting)
         {
             StopAllCoroutines();
 
-            //Попытка переставлять _replicInd в правильную позицию (чтобы потом можно было дописать реплику, если была написана не вся)
+            //Переставляет _replicInd в правильную позицию (чтобы потом можно было дописать реплику, если была написана не вся)
             int i = _dialogue.Nodes[_nodeInd].npcText.Length - 1;
             char[] chars = new char[] { '!', '.', '?' };
             Debug.Log(_dialogue.Nodes[_nodeInd].npcText[..i].LastIndexOfAny(chars));
@@ -53,7 +56,7 @@ public class ShowDialogue : MonoBehaviour
             IsPrinting = false;
             Debug.Log("1: " + _replicInd + "-" + _dialogue.Nodes[_nodeInd].npcText.Length);
         }
-        else if (_replicInd < _dialogue.Nodes[_nodeInd].npcText.Length - 1)
+        else if (_replicInd < _dialogue.Nodes[_nodeInd].npcText.Length - 1) //Если реплика напечатана не вся, пускаем на печать вторую часть
         {
             currentReplic.transform.parent = null;
             Destroy(currentReplic.gameObject);
@@ -61,20 +64,33 @@ public class ShowDialogue : MonoBehaviour
             Debug.Log("2: " + _replicInd);
             StartCoroutine(PrintReplic(_dialogue.Nodes[_nodeInd].npcText[(_replicInd + 1)..]));
         }
-        else
+        else //Если реплика полностью напечатана, то: в случае, если она конечная, закрываем диалог, иначе - пускааем на печать ответы к ней
         {
             _replicInd = 0;
 
-            currentReplic.transform.parent = null;
-            Destroy(currentReplic.gameObject);
+            if (_dialogue.Nodes[_nodeInd].exit == "True")
+                EndDialogue();
+            else
+            {
+                currentReplic.transform.parent = null;
+                Destroy(currentReplic.gameObject);
 
-            PrintAnswers();
+                PrintAnswers();
+            }
+        }
+    }
+    private void Update()
+    {
+        if (IsTrigger && Input.GetKeyDown(KeyCode.E))
+        {
+            StartDialogue();
+            IsTrigger = false;
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
-            StartDialogue();
+            IsTrigger = true;
     }
 
     /// <summary>
@@ -93,7 +109,11 @@ public class ShowDialogue : MonoBehaviour
 
         _continue.onClick.RemoveAllListeners();
         _continue.onClick.AddListener(Continue);
-        StartCoroutine(PrintReplic(_dialogue.Nodes[_nodeInd].npcText));
+
+        if (_dialogue.Nodes[_nodeInd].npcText != null)
+            StartCoroutine(PrintReplic(_dialogue.Nodes[_nodeInd].npcText));
+        else
+            PrintAnswers();
     }
     /// <summary>
     /// Печатет конкретную реплику побуквенно 
@@ -122,7 +142,7 @@ public class ShowDialogue : MonoBehaviour
         Debug.Log("Метод PrintReplic завершён");
     }
     /// <summary>
-    /// Выводит на экран варианты ответов к реплике npc
+    /// Создаёт варианты ответов к реплике 
     /// </summary>
     private void PrintAnswers()
     {
@@ -134,26 +154,11 @@ public class ShowDialogue : MonoBehaviour
 
         for (int i = 0; i < currentAnswers.Length; i++)
         {
-            GameObject btn =  CreateButton(i.ToString(), currentAnswers[i].text);
-
-            int index = i;
-
-            btn.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                Debug.Log(index);
-                if (currentAnswers[index].exit == "true")  //Используется другая переменная, так как если брать i будет использоваться её значение в последний момент (нажатие), а не текущая итерация цикла
-                    EndDialogue();
-                else
-                {
-                    _nodeInd = currentAnswers[index].toNode;
-                    PrintNode();
-                }
-            });
+            CreateButton(i.ToString(), currentAnswers[i].text, currentAnswers[i].toNode, currentAnswers[i].exit);
         }
-
     }
     /// <summary>
-    /// Выводит на экран реплику npc
+    /// Очищает панель от кнопок и запускает печать реплики 
     /// </summary>
     private void PrintNode()
     {
@@ -183,8 +188,13 @@ public class ShowDialogue : MonoBehaviour
     /// </summary>
     /// <param name="elemName"></param>
     /// <param name="text"></param>
-    private GameObject CreateButton(string elemName, string text)
+    /// <param name="toNode"></param>
+    /// <param name="exit"></param>
+
+    private void CreateButton(string elemName, string text, int toNode, string exit)
     {
+        Debug.Log("Создана кнопка: " + text + "\n" + toNode + " " + exit);
+
         //Создание кнопки
         GameObject btn = new GameObject("btn" + elemName, typeof(Image), typeof(Button));
         Color color = btn.GetComponent<Image>().color;
@@ -199,7 +209,22 @@ public class ShowDialogue : MonoBehaviour
         //Создание текста в кнопке
         CreateText(btn.transform, elemName, text);
 
-        return btn;
+        // Создание локальных переменных для замыкания
+        int localToNode = toNode; // Сохраняем текущее значение toNode
+        string localExit = exit; // Сохраняем текущее значение exit
+
+        //Привязка действия к кнопке
+        btn.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            Debug.Log(localToNode);
+            if (localExit == "True")  
+                EndDialogue();
+            else
+            {
+                _nodeInd = localToNode;
+                PrintNode();
+            }
+        });
     }
     /// <summary>
     /// Создание текста внутри поданного объекта 
@@ -216,10 +241,15 @@ public class ShowDialogue : MonoBehaviour
         txt.GetComponent<Text>().text = text;
         txt.GetComponent<Text>().color = Color.white;
         txt.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
-        RectTransform rt = txt.GetComponent<RectTransform>();
+        
         //Настройка позиции текста
-        rt.SetParent(parent);
+        RectTransform rt = txt.GetComponent<RectTransform>();
+        rt.SetParent(parent, false);
         rt.localScale = Vector2.one;
         rt.localPosition = Vector2.zero;
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.sizeDelta = Vector2.one;
     }
 }

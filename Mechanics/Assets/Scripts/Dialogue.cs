@@ -17,6 +17,8 @@ public class Dialogue
     {
         [XmlAttribute("npcText")]
         public string npcText;
+        [XmlAttribute("exit")]
+        public string exit;
         [XmlElement("answer")]
         public Answer[] answers;
     }
