@@ -22,7 +22,7 @@ public class ShowDialogue : MonoBehaviour
     bool IsTrigger = false; //ƒл€ контрол€ включени€ диалога
     bool IsPrinting;
     private int _nodeInd;
-    private int _replicInd; //“екущий символ репики (дл€ разделени€ на текста на несколько частей)
+    private int _startInd; //”казывает на начало текущей части реплики (дл€ корректного переключени€ между ними)
     private const int _maxReplicLength = 350; //ћаксимальное число символов реплики на экране
     private void Start()
     {
@@ -35,38 +35,38 @@ public class ShowDialogue : MonoBehaviour
     {
         Text currentReplic = _panel.GetChild(0).GetComponent<Text>();
 
-        Debug.Log("0: " + _replicInd + "-" + _dialogue.Nodes[_nodeInd].npcText.Length);
+        Debug.Log("0: " + _startInd + "-" + _dialogue.Nodes[_nodeInd].npcText.Length);
         //≈сли реплика печатает€ - пропускаем анимацию
         if (IsPrinting)
         {
             StopAllCoroutines();
 
-            //ѕереставл€ет _replicInd в правильную позицию (чтобы потом можно было дописать реплику, если была написана не вс€)
+            //ѕереставл€ет _startInd в правильную позицию (чтобы потом можно было дописать реплику, если была написана не вс€)
             int i = _dialogue.Nodes[_nodeInd].npcText.Length - 1;
             char[] chars = new char[] { '!', '.', '?' };
             Debug.Log(_dialogue.Nodes[_nodeInd].npcText[..i].LastIndexOfAny(chars));
 
-            while (_dialogue.Nodes[_nodeInd].npcText[..i].LastIndexOfAny(chars) > _maxReplicLength)
+            while (i - _startInd > _maxReplicLength)
             {
                 i = _dialogue.Nodes[_nodeInd].npcText[..i].LastIndexOfAny(chars);
             }
 
-            currentReplic.text = _dialogue.Nodes[_nodeInd].npcText[..(i + 1)];
-            _replicInd = i;
+            currentReplic.text = _dialogue.Nodes[_nodeInd].npcText[_startInd..(i + 1)];
+            _startInd = i + 1;
             IsPrinting = false;
-            Debug.Log("1: " + _replicInd + "-" + _dialogue.Nodes[_nodeInd].npcText.Length);
+            Debug.Log("1: " + _startInd + "-" + _dialogue.Nodes[_nodeInd].npcText.Length);
         }
-        else if (_replicInd < _dialogue.Nodes[_nodeInd].npcText.Length - 1) //≈сли реплика напечатана не вс€, пускаем на печать вторую часть
+        else if (_startInd < _dialogue.Nodes[_nodeInd].npcText.Length) //≈сли реплика напечатана не вс€, пускаем на печать вторую часть
         {
             currentReplic.transform.parent = null;
             Destroy(currentReplic.gameObject);
 
-            Debug.Log("2: " + _replicInd);
-            StartCoroutine(PrintReplic(_dialogue.Nodes[_nodeInd].npcText[(_replicInd + 1)..]));
+            Debug.Log("2: " + _startInd);
+            StartCoroutine(PrintReplic(_dialogue.Nodes[_nodeInd].npcText[(_startInd)..]));
         }
         else //≈сли реплика полностью напечатана, то: в случае, если она конечна€, закрываем диалог, иначе - пускааем на печать ответы к ней
         {
-            _replicInd = 0;
+            _startInd = 0;
 
             if (_dialogue.Nodes[_nodeInd].exit == "True")
                 EndDialogue();
@@ -104,7 +104,7 @@ public class ShowDialogue : MonoBehaviour
         _continue = _dialogueWindow.transform.GetChild(3).GetComponent<Button>();
         _npcName.text = NPCName;
         _nodeInd = 0;
-        _replicInd = 0;
+        _startInd = 0;
         IsPrinting = false;
 
         _continue.onClick.RemoveAllListeners();
@@ -135,9 +135,9 @@ public class ShowDialogue : MonoBehaviour
         {
             replic.text += text[i];
             i++;
-            _replicInd++;
             yield return new WaitForSeconds(speed);
         }
+        _startInd += i;
         IsPrinting = false;
         Debug.Log("ћетод PrintReplic завершЄн");
     }
